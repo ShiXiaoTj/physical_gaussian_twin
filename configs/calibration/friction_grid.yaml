@@ -1,0 +1,8 @@
+# Phase-1 default: 1-D grid search over dynamic friction (push/slide only).
+optimizer: grid
+parameters:
+  friction:
+    min: 0.05
+    max: 1.5
+    step: 0.05
+    initial: 0.2

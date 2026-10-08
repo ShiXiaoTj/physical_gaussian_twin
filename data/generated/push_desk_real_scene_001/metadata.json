@@ -1,0 +1,54 @@
+{
+  "episode_id": "push_desk_real_scene_001",
+  "action_type": "push",
+  "robot": "franka",
+  "object_id": "desk_01",
+  "scene_id": "synthetic_tabletop",
+  "world_frame": "world",
+  "sampling_rate": 30.0,
+  "start_time": 0.0,
+  "end_time": 3.066666666666667,
+  "extra": {
+    "synthetic": true,
+    "ground_truth": {
+      "friction": 0.5,
+      "mass": 3.0,
+      "restitution": 0.1
+    },
+    "generator_config": {
+      "episode_id": "push_desk_real_scene_001",
+      "object_id": "desk_01",
+      "true_friction": 0.5,
+      "true_mass": 3.0,
+      "true_restitution": 0.1,
+      "object_xy": [
+        1.1966370644986974,
+        2.047590811199443
+      ],
+      "object_yaw": 0.0,
+      "object_size": [
+        0.08,
+        0.08,
+        0.04
+      ],
+      "push_direction": [
+        1.0,
+        0.0
+      ],
+      "push_speed": 0.5,
+      "push_distance": 0.12,
+      "approach_distance": 0.1,
+      "lateral_offset": 0.0,
+      "retract_distance": 0.08,
+      "hold_time": 2.0,
+      "sampling_rate": 30.0,
+      "sim_dt": 0.002,
+      "noise_std_pos": 0.001,
+      "noise_std_rot": 0.0,
+      "seed": 0,
+      "backend": "mock",
+      "sim_options": {},
+      "push_height_ratio": 1.0
+    }
+  }
+}

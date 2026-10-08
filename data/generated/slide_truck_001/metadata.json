@@ -1,0 +1,55 @@
+{
+  "episode_id": "slide_truck_001",
+  "action_type": "slide",
+  "robot": "franka",
+  "object_id": "truck_01",
+  "scene_id": "synthetic_tabletop",
+  "world_frame": "world",
+  "sampling_rate": 30.0,
+  "start_time": 0.0,
+  "end_time": 3.7666666666666666,
+  "extra": {
+    "synthetic": true,
+    "ground_truth": {
+      "friction": 0.7,
+      "mass": 1800.0,
+      "restitution": 0.1
+    },
+    "generator_config": {
+      "episode_id": "slide_truck_001",
+      "object_id": "truck_01",
+      "action_type": "slide",
+      "true_friction": 0.7,
+      "true_mass": 1800.0,
+      "true_restitution": 0.1,
+      "object_xy": [
+        2.0607148031197062,
+        1.5317281472815303
+      ],
+      "object_yaw": 0.0,
+      "object_size": [
+        0.08,
+        0.08,
+        0.04
+      ],
+      "push_direction": [
+        1.0,
+        0.0
+      ],
+      "push_speed": 0.8,
+      "push_distance": 0.35,
+      "approach_distance": 0.1,
+      "lateral_offset": 0.0,
+      "retract_distance": 0.2,
+      "hold_time": 2.5,
+      "sampling_rate": 30.0,
+      "sim_dt": 0.002,
+      "noise_std_pos": 0.002,
+      "noise_std_rot": 0.0,
+      "seed": 0,
+      "backend": "mock",
+      "sim_options": {},
+      "push_height_ratio": 1.0
+    }
+  }
+}

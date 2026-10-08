@@ -1,0 +1,4 @@
+# Tabletop scene: support plane at world z = 0, right-handed z-up world.
+table_height: 0.0
+table_size: [1.2, 0.8]
+table_friction: 1.0

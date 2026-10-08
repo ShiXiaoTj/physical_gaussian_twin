@@ -1,0 +1,6 @@
+name: piper
+dof: 6
+ee_radius: 0.010
+base_pose:
+  position: [0.0, 0.0, 0.0]
+  quaternion_xyzw: [0.0, 0.0, 0.0, 1.0]

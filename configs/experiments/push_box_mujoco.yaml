@@ -1,0 +1,47 @@
+# MuJoCo-backend friction calibration (Phase 3, validated).
+# Synthetic ground truth 0.8, initial guess 0.2, full-physics rollouts.
+#
+# Experiment-design notes (docs/experiment_protocol.md):
+#   - squat object (8x8x4 cm): friction grid stays in the sliding regime
+#   - center-height push + EE retraction: clean, repeatable release
+#   - compliant pusher (ee_weld_solref) + overdamped contact: suppresses
+#     the contact chatter that otherwise buries the friction signal
+
+defaults: ../default.yaml
+
+experiment_id: push_box_mujoco_001
+
+robot: franka
+
+object:
+  object_id: box_01
+  shape: box
+  size: [0.08, 0.08, 0.04]
+  physics:
+    mass: 0.42
+    friction_dynamic: 0.2      # deliberately wrong initial guess
+    restitution: 0.1
+
+simulation:
+  backend: mujoco
+  dt: 0.001                    # finer step for contact-rich rollouts
+  settle_time: 0.5
+  contact_solref: 0.01
+  contact_dampratio: 2.0
+  ee_weld_solref: 0.04
+
+calibration:
+  optimizer: grid
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+  rotation_weight: 0.0
+
+evaluation:
+  resample_rate: 30.0

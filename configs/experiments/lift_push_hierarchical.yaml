@@ -1,0 +1,62 @@
+# Phase 8: staged (hierarchical) calibration — LIFT -> mass, PUSH -> friction.
+#
+# Two synthetic episodes of the SAME object:
+#   lift  (truth mass 0.42 kg)   -> identifies mass via the grip-force signal
+#   push  (truth friction 0.8)   -> identifies friction via the trajectory signal
+# The mass recovered in stage 1 is threaded into stage 2 (never optimized
+# jointly with friction from one push — the identifiability guard).
+#
+#   python scripts/run_hierarchical.py --example lift_push
+
+experiment_id: lift_push_hierarchical_001
+
+robot: franka
+
+object:
+  object_id: box_01
+  shape: box
+  size: [0.08, 0.08, 0.04]
+  physics:
+    mass: 1.0                # deliberately wrong initial guess (truth 0.42)
+    friction_dynamic: 0.2    # deliberately wrong initial guess (truth 0.8)
+    restitution: 0.1
+
+simulation:
+  backend: mock
+  dt: 0.002
+  settle_time: 0.5
+
+calibration:
+  optimizer: grid
+  parameters:
+    mass:
+      min: 0.1
+      max: 2.0
+      step: 0.05
+      initial: 1.0
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+
+evaluation:
+  resample_rate: 30.0
+
+# ground-truth used by the synthetic generators (and recorded for scoring)
+synthetic:
+  true_mass: 0.42
+  true_friction: 0.8
+  lift:
+    lift_height: 0.10
+    lift_duration: 1.2
+    hold_time: 1.5
+    noise_std_force: 0.05    # ~load-cell noise
+    sampling_rate: 100.0
+  push:
+    push_speed: 0.5
+    noise_std_pos: 0.001     # ~tracking noise
+    sampling_rate: 30.0

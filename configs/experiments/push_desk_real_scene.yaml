@@ -1,0 +1,62 @@
+# Phase 5-6 demo: Physical Gaussian Twin from a REAL 3DGS scene.
+#
+# Scene: high-school classroom (ModelScope Lengyd/high-school-classroom-3dgs,
+# CC-BY-NC-4.0), 2.3M gaussians, aligned to z-up with the desk plane at z=0
+# and metric scale 0.78 (anchored on desk height / room height; see
+# docs/experiment_protocol.md). Target instance: the teacher's desk surface,
+# segmented by manual world-frame bbox; its collision proxy is derived from
+# the real gaussians (proxy_from_gaussians).
+#
+# The push episode is synthetic (no real robot yet) but executes AT the
+# instance's true scene location, so gaussian instance, collision proxy and
+# episode share one world frame — the full S2-S7 binding chain on real data.
+#
+# Prepare the scene first (downloads already in data/gaussian/):
+#   python scripts/prepare_gaussian_scene.py \
+#     --input data/gaussian/classroom_model.ply \
+#     --output data/gaussian/classroom_scene.npz \
+#     --scale 0.78 --plane-threshold 0.05 --min-opacity 0.5 \
+#     --crop -4.8 4.3 -4.1 4.3 -1.0 3.0 --min-keep-opacity 0.15
+
+defaults: ../default.yaml
+
+experiment_id: push_desk_real_scene_001
+
+robot: franka
+
+gaussian:
+  synthetic: false
+  scene_path: data/gaussian/classroom_scene.npz
+  instance_bbox:
+    min: [0.55, 1.80, -0.05]
+    max: [1.95, 2.75, 1.40]
+
+object:
+  object_id: desk_01
+  proxy_from_gaussians: true       # collision geometry from the real gaussians
+  proxy_method: bbox               # bbox | convex_hull | sphere
+  physics:
+    mass: 3.0                      # desk-top slab; fixed (identifiability)
+    friction_dynamic: 0.2          # initial guess; truth in the episode is 0.5
+    restitution: 0.1
+
+simulation:
+  backend: mock
+  dt: 0.002
+  settle_time: 0.5
+
+calibration:
+  optimizer: grid
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+  rotation_weight: 0.0
+
+evaluation:
+  resample_rate: 30.0

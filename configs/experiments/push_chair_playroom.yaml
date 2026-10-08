@@ -1,0 +1,55 @@
+# Real 3DGS scene demo #2: push a red kids' chair in the "playroom" scene
+# (Deep Blending benchmark, via ModelScope Voxel51/gaussian_splatting,
+# Apache-2.0 dataset card; 1.92M gaussians).
+#
+# Scene prep (downloads in data/gaussian/):
+#   python scripts/prepare_gaussian_scene.py \
+#     --input data/gaussian/playroom.ply --output data/gaussian/playroom_scene.npz \
+#     --scale 0.58 --plane-threshold 0.05 --crop -4.0 3.5 -4.0 3.0 -1.0 3.0
+# Metric scale 0.58 double-anchored: ceiling 4.15 units -> 2.4 m AND desk
+# plane 1.28 units -> 0.74 m.
+#
+# Target: the red kids' armchair on the floor (0.84 x 0.79 m footprint,
+# 0.55 m tall) — a genuinely pushable object.
+
+defaults: ../default.yaml
+
+experiment_id: push_chair_playroom_001
+
+robot: franka
+
+gaussian:
+  synthetic: false
+  scene_path: data/gaussian/playroom_scene.npz
+  instance_bbox:
+    min: [0.90, 0.55, -0.05]
+    max: [1.85, 1.50, 0.70]
+
+object:
+  object_id: red_chair_01
+  proxy_from_gaussians: true
+  proxy_method: bbox
+  physics:
+    mass: 3.0                 # kids' upholstered chair; fixed (identifiability)
+    friction_dynamic: 0.2     # initial guess; episode truth 0.6 (fabric/wood)
+    restitution: 0.1
+
+simulation:
+  backend: mock
+  dt: 0.002
+  settle_time: 0.5
+
+calibration:
+  optimizer: grid
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+
+evaluation:
+  resample_rate: 30.0

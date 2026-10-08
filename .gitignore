@@ -1,0 +1,61 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# ---------- 大型数据资产：一律不入库 ----------
+# 高斯场景 / 点云 / 重建输入，由脚本按文档重新下载或生成
+data/gaussian/*
+!data/gaussian/.gitkeep
+data/mipnerf360/
+data/real/*
+!data/real/.gitkeep
+# 合成示例 episode（368 KB）：随仓库提供，使 quick start 开箱即用
+!data/generated/**
+outputs/*
+!outputs/.gitkeep
+
+# ---------- 大体积生成物（可由脚本重建）----------
+docs/*.docx
+docs/*.pdf
+docs/demo_report.html
+docs/patent/*.docx
+docs/patent/*.pdf
+*.pptx
+
+# ---------- 媒体 / 点云 / 压缩包 ----------
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.ply
+*.splat
+*.npz
+*.bin
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+
+# ---------- 专利申请材料：未受理前不入库 ----------
+docs/patent/
+docs/patent_mapping.md
+scripts/build_patent_docx.py
+scripts/make_patent_figures.py
+*.docx

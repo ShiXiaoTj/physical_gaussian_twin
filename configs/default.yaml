@@ -1,0 +1,59 @@
+# pgtwin default configuration.
+# Experiment configs in configs/experiments/ override these keys.
+
+experiment_id: default
+
+robot: franka
+
+scene:
+  table_height: 0.0
+
+object:
+  object_id: box_01
+  shape: box                 # box | sphere | cylinder | convex_hull
+  size: [0.06, 0.06, 0.06]   # full extents (m)
+  physics:
+    mass: 0.42               # kg  — fixed in Phase 1 (identifiability)
+    friction_static: 0.6
+    friction_dynamic: 0.5    # initial guess; calibrated from push episodes
+    restitution: 0.1
+    young_modulus: 1.0e+6
+    poisson_ratio: 0.3
+  proxy_from_gaussians: false
+  proxy_method: convex_hull
+
+gaussian:
+  synthetic: true            # synthesize a scene when no reconstruction exists
+  scene_path: null           # path to a 3DGS .ply / .npz export
+  max_points: 200000
+  bbox_margin: 0.06          # half-size of the manual instance bbox (m)
+
+simulation:
+  backend: mock              # mock | mujoco | isaac
+  dt: 0.002
+  gravity: 9.81
+  seed: 0
+  settle_time: 0.5           # extra rollout after the push (s)
+
+calibration:
+  optimizer: grid            # grid | random | bayesian
+  n_samples: 30              # random/bayesian only
+  seed: 0
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+  rotation_weight: 0.0
+  velocity_weight: 0.0
+  contact_weight: 0.0
+
+evaluation:
+  resample_rate: 30.0        # Hz for real-sim alignment
+
+logging:
+  level: INFO

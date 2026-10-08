@@ -1,0 +1,6 @@
+name: franka
+dof: 7
+ee_radius: 0.012          # closed-gripper / pusher tip radius (m)
+base_pose:
+  position: [0.0, 0.0, 0.0]
+  quaternion_xyzw: [0.0, 0.0, 0.0, 1.0]

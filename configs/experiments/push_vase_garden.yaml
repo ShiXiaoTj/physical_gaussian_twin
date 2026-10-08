@@ -1,0 +1,69 @@
+# THE FULL CHAIN, NO BORROWED ASSETS: photos -> trained 3DGS -> calibrated twin.
+#
+# Scene: Mip-NeRF360 "garden" (official Google-hosted capture, 185 photos,
+# 5187x3361). Trained from scratch on this machine with gsplat 1.5.1 on an
+# RTX 4090D: 15k iterations, 1297x840, 655 s -> 10.0M gaussians, held-out
+# PSNR 25.06 dB (eval_015000_*.png are the GT|render pairs).
+#
+#   conda run -n pgtwin-gs python scripts/train_gsplat.py \
+#       --data data/mipnerf360/garden --out data/gaussian/garden_trained \
+#       --downscale 4 --iters 15000
+#   python scripts/prepare_gaussian_scene.py \
+#       --input data/gaussian/garden_trained/scene.splat \
+#       --output data/gaussian/garden_scene.npz --scale 0.56 \
+#       --plane-threshold 0.05 --crop -1.7 1.7 -1.7 1.7 -0.28 1.7
+#
+# Metric scale 0.56 is DOUBLE-ANCHORED on the scene's own furniture:
+#   table-top height 1.32 units -> 0.74 m  => 0.568
+#   table diameter   3.12 units -> 1.78 m  => 0.570
+# (two independent anchors agreeing to 0.4% — the protocol's rule 7).
+#
+# Target: the dried-flower vase standing on the table. Instance bbox covers
+# vase+flowers (visual); the collision proxy is the BODY cylinder only —
+# the dried flowers never touch the table and must not enter the physics.
+
+defaults: ../default.yaml
+
+experiment_id: push_vase_garden_001
+
+robot: franka
+
+gaussian:
+  synthetic: false
+  scene_path: data/gaussian/garden_scene.npz
+  instance_bbox:
+    min: [0.00, -0.80, 0.76]
+    max: [0.50, -0.25, 1.45]
+
+object:
+  object_id: vase_01
+  shape: cylinder
+  radius: 0.09            # measured body radius (p50) at scale 0.56
+  height: 0.26            # measured body height below the neck
+  physics:
+    mass: 1.2             # ceramic vase + dried arrangement; fixed
+    friction_dynamic: 0.2 # initial guess; episode truth 0.55 (ceramic/wood)
+    restitution: 0.1
+
+scene:
+  table_height: 0.74      # measured table-top height
+
+simulation:
+  backend: mock
+  dt: 0.002
+  settle_time: 0.5
+
+calibration:
+  optimizer: grid
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+
+evaluation:
+  resample_rate: 30.0

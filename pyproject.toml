@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pgtwin"
+version = "0.1.0"
+description = "Physical Gaussian Digital Twin: robot-interaction-driven physics calibration for 3D Gaussian scenes"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Physical Gaussian Twin Team" }]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "pandas>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+sim = ["mujoco>=3.1"]
+dev = ["pytest>=7.0", "pytest-cov"]
+
+[project.scripts]
+pgtwin = "pgtwin.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

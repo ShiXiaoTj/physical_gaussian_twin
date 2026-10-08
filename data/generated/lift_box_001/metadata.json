@@ -1,0 +1,45 @@
+{
+  "episode_id": "lift_box_001",
+  "action_type": "lift",
+  "robot": "franka",
+  "object_id": "box_01",
+  "scene_id": "synthetic_tabletop",
+  "world_frame": "world",
+  "sampling_rate": 100.0,
+  "start_time": 0.0,
+  "end_time": 2.7,
+  "extra": {
+    "synthetic": true,
+    "ground_truth": {
+      "mass": 0.42,
+      "friction": 0.8,
+      "restitution": 0.1
+    },
+    "generator_config": {
+      "episode_id": "lift_box_001",
+      "object_id": "box_01",
+      "true_mass": 0.42,
+      "true_friction": 0.8,
+      "true_restitution": 0.1,
+      "object_xy": [
+        0.5,
+        0.0
+      ],
+      "object_size": [
+        0.08,
+        0.08,
+        0.04
+      ],
+      "lift_height": 0.1,
+      "lift_duration": 1.2,
+      "hold_time": 1.5,
+      "sampling_rate": 100.0,
+      "sim_dt": 0.002,
+      "noise_std_force": 0.05,
+      "noise_std_pos": 0.0,
+      "seed": 0,
+      "backend": "mock",
+      "sim_options": {}
+    }
+  }
+}

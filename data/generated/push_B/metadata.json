@@ -1,0 +1,44 @@
+{
+  "episode_id": "push_B",
+  "action_type": "push",
+  "robot": "franka",
+  "object_id": "box_01",
+  "scene_id": "synthetic_tabletop",
+  "world_frame": "world",
+  "sampling_rate": 30.0,
+  "start_time": 0.0,
+  "end_time": 2.933333333333333,
+  "extra": {
+    "synthetic": true,
+    "ground_truth": {
+      "friction": 0.45,
+      "mass": 0.42,
+      "restitution": 0.1
+    },
+    "generator_config": {
+      "episode_id": "push_B",
+      "true_friction": 0.45,
+      "true_mass": 0.42,
+      "true_restitution": 0.1,
+      "object_xy": [
+        0.5,
+        0.0
+      ],
+      "object_yaw": 0.0,
+      "push_direction": [
+        1.0,
+        0.0
+      ],
+      "push_speed": 0.5,
+      "push_distance": 0.12,
+      "approach_distance": 0.1,
+      "lateral_offset": 0.015,
+      "hold_time": 2.0,
+      "sampling_rate": 30.0,
+      "sim_dt": 0.002,
+      "noise_std_pos": 0.001,
+      "noise_std_rot": 0.0,
+      "seed": 0
+    }
+  }
+}

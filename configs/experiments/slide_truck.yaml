@@ -1,0 +1,57 @@
+# Real 3DGS scene demo #3: vehicle-scale slide calibration in the classic
+# Tanks&Temples "truck" scene (via ModelScope Voxel51/gaussian_splatting;
+# 2.06M gaussians). The reconstruction is approximately metric already
+# (truck length 6.7 units ~ 6.7 m) -> scale 1.0.
+#
+# Scene prep:
+#   python scripts/prepare_gaussian_scene.py \
+#     --input data/gaussian/truck.ply --output data/gaussian/truck_scene.npz \
+#     --scale 1.0 --plane-threshold 0.05 --crop -9.0 13.0 -9.0 11.0 -1.0 7.0
+#
+# Framing note: this is a SCALE-GENERALITY demo — the same pipeline binds a
+# 6.7 m, ~1.8 t object. Locked-wheel rubber-on-concrete sliding is a real
+# regime (mu ~ 0.6-0.8) and the quasi-static slide model is mass-independent,
+# so friction stays identifiable; a real vehicle push would obviously need a
+# vehicle, not a Franka (episode is synthetic, action tagged SLIDE).
+
+defaults: ../default.yaml
+
+experiment_id: slide_truck_001
+
+robot: franka
+
+gaussian:
+  synthetic: false
+  scene_path: data/gaussian/truck_scene.npz
+  instance_bbox:
+    min: [-0.28, -0.62, -0.05]
+    max: [5.41, 3.08, 2.60]
+
+object:
+  object_id: truck_01
+  proxy_from_gaussians: true
+  proxy_method: bbox
+  physics:
+    mass: 1800.0              # fixed; slide distance is mass-independent
+    friction_dynamic: 0.2     # initial guess; episode truth 0.7
+    restitution: 0.1
+
+simulation:
+  backend: mock
+  dt: 0.002
+  settle_time: 1.0
+
+calibration:
+  optimizer: grid
+  parameters:
+    friction:
+      min: 0.05
+      max: 1.5
+      step: 0.05
+      initial: 0.2
+
+loss:
+  position_weight: 1.0
+
+evaluation:
+  resample_rate: 30.0
